@@ -26,8 +26,9 @@ const Feed = () => {
     setSearchText(e.target.value);
   }
 
-  const handleTagClick = () => {
-    console.log('Tag Clicked');
+  const handleTagClick = (tag) => {
+    document.getElementsByClassName('search_input')[0].value = tag;
+    setSearchText(tag);
   }
   const fetchPrompts = async () => {
     const response = await fetch(`/api/prompt/search/${searchText}`);
