@@ -1,7 +1,8 @@
 'use client'
 
-import { useState, useEffect } from "react";
+import { useState, useMemo, useEffect } from "react";
 import PromptCard from "./PromptCard";
+import { debounce } from "lodash";
 
 const PromptCardList = ({ data, handleTagClick }) => {
   return (
@@ -21,22 +22,26 @@ const Feed = () => {
   const [searchText, setSearchText] = useState('');
   const [posts, setPosts] = useState([]);
 
-  const handleSearchChange = () => {
-    console.log('Search change');
+  const handleSearchChange = (e) => {
+    setSearchText(e.target.value);
   }
-  
+
   const handleTagClick = () => {
     console.log('Tag Clicked');
   }
   const fetchPrompts = async () => {
-    const response = await fetch('/api/prompt');
+    const response = await fetch(`/api/prompt/search/${searchText}`);
     const data = await response.json();
     setPosts(data);
   }
 
+  const searchDebounce = debounce(handleSearchChange, 500);
+
   useEffect(() => {
-    fetchPrompts();
-  }, []);
+    if (searchText.length === 0 || searchText.length > 2) {
+      fetchPrompts();
+    }
+  }, [searchText]);
 
   return (
     <section className='feed'>
@@ -44,8 +49,7 @@ const Feed = () => {
         <input
           type="text"
           placeholder="Search for a tag or username"
-          value={searchText}
-          onChange={handleSearchChange}
+          onChange={searchDebounce}
           required
           className="search_input peer"
         />

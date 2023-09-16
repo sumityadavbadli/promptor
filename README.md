@@ -26,3 +26,4 @@ This project is about - Promptor is an open-source AI prompting tool for modern 
 -   CRUD Operations in MongoDB using Next.JS
 -   Google Authentication
 -   Fake Data seeding from command line
+-   MongoDB full text based search added
