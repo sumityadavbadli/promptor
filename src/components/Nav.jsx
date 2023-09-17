@@ -22,7 +22,7 @@ const Nav = () => {
   return (
     <nav className="flex-between w-full mb-16 pt-3">
       <Link href='/' className="flex gap-2 flex-center">
-        <Image src="assets/images/logo.svg" width={30} height={30} className="object-contain" alt="logo"/>
+        <Image src="assets/images/logo.svg" width={30} height={30} className="object-contain" alt="logo" />
         <p className="logo_text">Promptor</p>
       </Link>
       {/* Mobile Navigation */}
@@ -37,7 +37,13 @@ const Nav = () => {
               }}>
                 Sign Out
               </button>
-              <Link href="/profile">
+              <Link
+                href={{
+                  pathname: '/profile',
+                  query: {
+                    user: session?.user.id,
+                  },
+                }}>
                 <Image
                   src={session?.user.image}
                   width={33}
@@ -86,7 +92,12 @@ const Nav = () => {
                 {(toggleDropdown) && (
                   <div className="dropdown">
                     <Link
-                      href="/profile"
+                      href={{
+                        pathname: '/profile',
+                        query: {
+                          user: session?.user.id,
+                        },
+                      }}
                       className="dropdown_link"
                       onClick={() => setToggleDropdown(false)}
                     >

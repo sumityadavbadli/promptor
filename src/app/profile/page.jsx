@@ -2,15 +2,18 @@
 
 import { useState, useEffect } from "react"
 import { useSession } from "next-auth/react"
-import { useRouter } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 
 import Profile from "@components/Profile"
 
 const MyProfile = () => {
 
-    const [ posts, setPosts ] = useState([]);
+    const [posts, setPosts] = useState([]);
     const { data: session } = useSession();
     const router = useRouter();
+    const searchParams = useSearchParams();
+    const currentUserId = searchParams.get('user');
+    const currentUserName = searchParams.get('name');
 
     const handleEdit = (post) => {
         router.push(`/update-prompt?id=${post._id}`);
@@ -18,9 +21,9 @@ const MyProfile = () => {
 
     const handleDelete = async (post) => {
         const hasConfirmed = confirm("Are you sure you wants to delete this Prompt?");
-        if(hasConfirmed){
+        if (hasConfirmed) {
             try {
-                const response = await fetch(`/api/prompt/${post._id}`,{
+                const response = await fetch(`/api/prompt/${post._id}`, {
                     method: 'DELETE'
                 })
                 const filteredPost = posts.filter(item => item._id !== post._id);
@@ -31,7 +34,7 @@ const MyProfile = () => {
         }
     }
     const fetchPrompts = async () => {
-        const response = await fetch(`/api/users/${session?.user.id}/posts`);
+        const response = await fetch(`/api/users/${currentUserId}/posts`);
         const data = await response.json();
         setPosts(data);
     }
@@ -42,7 +45,7 @@ const MyProfile = () => {
 
     return (
         <Profile
-            name="My"
+            name={currentUserName ?? 'My'}
             desc="Welcome to your personalized profile page"
             data={posts}
             handleEdit={handleEdit}
