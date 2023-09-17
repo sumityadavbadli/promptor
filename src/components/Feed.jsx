@@ -42,6 +42,10 @@ const Feed = () => {
     if (searchText.length === 0 || searchText.length > 2) {
       fetchPrompts();
     }
+    // Cleanup Function: Called when we unmount
+    return () => {
+      searchDebounce.cancel();
+    }
   }, [searchText]);
 
   return (
